@@ -5,8 +5,11 @@
   "type": "module",
   "main": "dist-electron/main.js",
   "scripts": {
-    "typecheck": "tsc --noEmit",
+    "dev:bundle": "tsc -p tsconfig.json -w",
+    "dev:electron": "bun run scripts/dev-electron.mjs",
+    "dev": "bun run --parallel dev:bundle dev:electron",
     "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc --noEmit",
     "start": "electron ."
   },
   "devDependencies": {
