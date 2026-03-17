@@ -6,7 +6,9 @@
     "dev": "turbo run dev",
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "check-types": "turbo run typecheck"
+    "check-types": "turbo run typecheck",
+    "serve:updates": "bunx serve release --listen 3001",
+    "dist": "bun run build && bun run --cwd apps/desktop dist"
   },
   "devDependencies": {
     "prettier": "^3.7.4",

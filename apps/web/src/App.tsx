@@ -7,6 +7,7 @@ export default function App() {
     <div>
       <ThemeToggle />
       <UpdateBanner />
+      New Version
     </div>
   );
 }

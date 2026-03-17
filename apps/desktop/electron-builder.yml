@@ -16,8 +16,6 @@ win:
 linux:
   target:
     - AppImage
-
 publish:
-  provider: github
-  owner: Abdullah0AA
-  repo: a3-electron-template
+  provider: generic
+  url: http://localhost:3001

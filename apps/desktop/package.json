@@ -1,8 +1,12 @@
 {
   "name": "@a3-electron-template/desktop",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "private": true,
   "main": "dist-electron/main.js",
+  "author": {
+    "name": "Abdullah0AA"
+  },
+  "description": "A3 Electron App Template",
   "scripts": {
     "dev:bundle": "tsdown --watch",
     "dev:electron": "bun run scripts/dev-electron.mjs",
