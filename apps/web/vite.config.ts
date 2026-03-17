@@ -13,4 +13,8 @@ export default defineConfig({
   resolve: {
     tsconfigPaths: true,
   },
+  server: {
+    port: 5733,
+    strictPort: true,
+  },
 });

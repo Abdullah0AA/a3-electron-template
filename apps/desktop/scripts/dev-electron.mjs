@@ -5,16 +5,11 @@ import waitOn from "wait-on";
 
 import { desktopDir, resolveElectronPath } from "./electron-launcher.mjs";
 
-const port = Number(process.env.ELECTRON_RENDERER_PORT ?? 5733);
+const port = 5733;
 const devServerUrl = `http://localhost:${port}`;
-const requiredFiles = [
-  "dist-electron/main.js",
-  "dist-electron/preload.js",
-  "../server/dist/index.mjs",
-];
+const requiredFiles = ["dist-electron/main.js", "dist-electron/preload.js"];
 const watchedDirectories = [
   { directory: "dist-electron", files: new Set(["main.js", "preload.js"]) },
-  { directory: "../server/dist", files: new Set(["index.mjs"]) },
 ];
 const forcedShutdownTimeoutMs = 1_500;
 const restartDebounceMs = 120;
@@ -50,7 +45,7 @@ function cleanupStaleDevApps() {
     return;
   }
 
-  spawnSync("pkill", ["-f", "--", `--t3code-dev-root=${desktopDir}`], {
+  spawnSync("pkill", ["-f", "--", `--a3-dev-root=${desktopDir}`], {
     stdio: "ignore",
   });
 }
@@ -62,7 +57,7 @@ function startApp() {
 
   const app = spawn(
     resolveElectronPath(),
-    [`--t3code-dev-root=${desktopDir}`, "dist-electron/main.js"],
+    [`--a3-dev-root=${desktopDir}`, "dist-electron/main.js"],
     {
       cwd: desktopDir,
       env: {
