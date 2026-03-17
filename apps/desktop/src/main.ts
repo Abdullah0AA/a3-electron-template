@@ -12,6 +12,7 @@ import windowStateKeeper from "electron-window-state";
 
 const DESKTOP_SCHEME = "a3";
 const isDevelopment = Boolean(process.env.VITE_DEV_SERVER_URL);
+let mainWindow: BrowserWindow | null = null;
 
 protocol.registerSchemesAsPrivileged([
   {
@@ -87,9 +88,9 @@ function registerDesktopProtocol(): void {
 function createWindow() {
   const windowState = windowStateKeeper({
     defaultHeight: 600,
-    defaultWidth: 80,
+    defaultWidth: 800,
   });
-  const win = new BrowserWindow({
+  mainWindow = new BrowserWindow({
     x: windowState.x,
     y: windowState.y,
     width: windowState.width,
@@ -100,12 +101,16 @@ function createWindow() {
       sandbox: true,
     },
   });
-  windowState.manage(win);
+  windowState.manage(mainWindow);
+
+  mainWindow.on("closed", () => {
+    mainWindow = null;
+  });
 
   if (isDevelopment) {
-    win.loadURL("http://localhost:5733");
+    mainWindow.loadURL("http://localhost:5733");
   } else {
-    win.loadURL(`${DESKTOP_SCHEME}://app/index.html`);
+    mainWindow.loadURL(`${DESKTOP_SCHEME}://app/index.html`);
   }
 }
 
@@ -118,6 +123,11 @@ ipcMain.handle("set-theme", (_event, theme: string) => {
   }
 });
 
+const gotLock = app.requestSingleInstanceLock();
+if (!gotLock) {
+  app.quit();
+}
+
 app.whenReady().then(() => {
   registerDesktopProtocol();
   createWindow();
@@ -126,6 +136,13 @@ app.whenReady().then(() => {
       createWindow();
     }
   });
+});
+
+app.on("second-instance", () => {
+  if (mainWindow) {
+    if (mainWindow.isMinimized()) mainWindow.restore();
+    mainWindow.focus();
+  }
 });
 
 app.on("window-all-closed", () => {
