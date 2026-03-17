@@ -1,6 +1,14 @@
-import { app, BrowserWindow, ipcMain, protocol, Notification } from "electron";
+import {
+  app,
+  BrowserWindow,
+  ipcMain,
+  protocol,
+  Notification,
+  nativeTheme,
+} from "electron";
 import path from "node:path";
 import fs from "node:fs";
+import windowStateKeeper from "electron-window-state";
 
 const DESKTOP_SCHEME = "a3";
 const isDevelopment = Boolean(process.env.VITE_DEV_SERVER_URL);
@@ -77,15 +85,22 @@ function registerDesktopProtocol(): void {
   });
 }
 function createWindow() {
+  const windowState = windowStateKeeper({
+    defaultHeight: 600,
+    defaultWidth: 80,
+  });
   const win = new BrowserWindow({
-    width: 800,
-    height: 600,
+    x: windowState.x,
+    y: windowState.y,
+    width: windowState.width,
+    height: windowState.height,
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
       contextIsolation: true,
       sandbox: true,
     },
   });
+  windowState.manage(win);
 
   if (isDevelopment) {
     win.loadURL("http://localhost:5733");
@@ -96,6 +111,11 @@ function createWindow() {
 
 ipcMain.handle("show-notification", (_event, title, body) => {
   new Notification({ title, body }).show();
+});
+ipcMain.handle("set-theme", (_event, theme: string) => {
+  if (theme === "light" || theme === "dark" || theme === "system") {
+    nativeTheme.themeSource = theme;
+  }
 });
 
 app.whenReady().then(() => {

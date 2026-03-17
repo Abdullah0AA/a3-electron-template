@@ -1,3 +1,4 @@
+import { ThemeToggle } from "./components/ThemeToggle";
 import { Button } from "./components/ui/button";
 
 export default function App() {
@@ -13,6 +14,7 @@ export default function App() {
       >
         Click me
       </Button>
+      <ThemeToggle />
     </div>
   );
 }

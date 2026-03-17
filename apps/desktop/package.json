@@ -12,7 +12,8 @@
     "start": "electron ."
   },
   "dependencies": {
-    "@a3-electron-template/contracts": "workspace:*"
+    "@a3-electron-template/contracts": "workspace:*",
+    "electron-window-state": "^5.0.3"
   },
   "devDependencies": {
     "@types/node": "catalog:",

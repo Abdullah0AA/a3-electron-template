@@ -115,7 +115,9 @@
   --radius-3xl: calc(var(--radius) * 2.2);
   --radius-4xl: calc(var(--radius) * 2.6);
 }
-
+.no-transitions * {
+  transition: none !important;
+}
 @layer base {
   * {
     @apply border-border outline-ring/50;
