@@ -38,10 +38,16 @@ release/       — Built artifacts (gitignored)
 
 ## Stack
 
-- **Electron** with electron-builder and electron-updater
-- **React 19 + Vite 8** powered by Rolldown
-- **Tailwind v4** — CSS-first, no config file
-- **shadcn/ui** with Base UI primitives
-- **Turborepo + Bun** monorepo
-- **tsdown** bundles main + preload as CJS
+- **Electron** with [electron-builder](https://www.electron.build) and [electron-updater](https://www.electron.build/auto-update)
+- **React 19 + Vite 8**
+- **[Tailwind v4](https://tailwindcss.com)**
+- **[shadcn/ui](https://ui.shadcn.com)** with Base UI primitives
+- **[Turborepo](https://turborepo.dev/) + [Bun](https://bun.sh)** monorepo
+- **[tsdown](https://tsdown.dev)** bundles main + preload as CJS
 - **TypeScript 5.9** strict mode throughout
+
+---
+
+## Acknowledgements
+
+Many patterns in this template are adapted from [T3 Code](https://github.com/pingdotgg/t3code)
