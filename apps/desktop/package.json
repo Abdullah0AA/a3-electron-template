@@ -14,6 +14,7 @@
   },
   "dependencies": {
     "@a3-electron-template/contracts": "workspace:*",
+    "electron-updater": "^6.8.3",
     "electron-window-state": "^5.0.3"
   },
   "devDependencies": {

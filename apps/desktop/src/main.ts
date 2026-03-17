@@ -6,13 +6,68 @@ import {
   Notification,
   nativeTheme,
 } from "electron";
+import { autoUpdater } from "electron-updater";
 import path from "node:path";
 import fs from "node:fs";
 import windowStateKeeper from "electron-window-state";
+import { UpdateState } from "@a3-electron-template/contracts";
 
 const DESKTOP_SCHEME = "a3";
 const isDevelopment = Boolean(process.env.VITE_DEV_SERVER_URL);
 let mainWindow: BrowserWindow | null = null;
+
+let updateState: UpdateState = {
+  status: "idle",
+  version: null,
+  percent: null,
+  error: null,
+};
+
+function emitUpdateState() {
+  if (mainWindow) {
+    mainWindow.webContents.send("update-state", updateState);
+  }
+}
+function setUpdateState(patch: Partial<UpdateState>) {
+  updateState = { ...updateState, ...patch };
+  emitUpdateState();
+}
+
+function configureAutoUpdater() {
+  autoUpdater.autoDownload = false;
+  autoUpdater.autoInstallOnAppQuit = false;
+
+  autoUpdater.on("checking-for-update", () => {
+    setUpdateState({ status: "checking" });
+  });
+  autoUpdater.on("update-available", (info) => {
+    setUpdateState({ status: "available", version: info.version });
+  });
+  autoUpdater.on("update-not-available", () => {
+    setUpdateState({ status: "up-to-date" });
+  });
+  autoUpdater.on("download-progress", (progress) => {
+    setUpdateState({ status: "downloading", percent: progress.percent });
+  });
+  autoUpdater.on("update-downloaded", (info) => {
+    setUpdateState({ status: "downloaded", version: info.version });
+  });
+  autoUpdater.on("error", (error) => {
+    setUpdateState({ status: "error", error: error.message });
+  });
+
+  // Check for updates on startup after a short delay
+  setTimeout(() => {
+    autoUpdater.checkForUpdates().catch((error) => {
+      console.error("Failed to check for updates:", error);
+    });
+  }, 10_000).unref();
+}
+
+ipcMain.handle("check-for-updates", () => autoUpdater.checkForUpdates());
+ipcMain.handle("download-update", () => autoUpdater.downloadUpdate());
+ipcMain.handle("install-update", () => autoUpdater.quitAndInstall());
+ipcMain.handle("get-update-state", () => updateState);
 
 protocol.registerSchemesAsPrivileged([
   {
@@ -27,6 +82,14 @@ protocol.registerSchemesAsPrivileged([
 ]);
 
 function resolveStaticDir(): string | null {
+  if (app.isPackaged) {
+    const prodPath = path.join(process.resourcesPath, "web/dist");
+    if (fs.existsSync(path.join(prodPath, "index.html"))) {
+      return prodPath;
+    }
+    return null;
+  }
+
   const candidates = [
     path.join(__dirname, "../../web/dist"),
     path.join(__dirname, "../../../apps/web/dist"),
@@ -38,7 +101,6 @@ function resolveStaticDir(): string | null {
   }
   return null;
 }
-
 function registerDesktopProtocol(): void {
   if (isDevelopment) return;
 
@@ -131,6 +193,9 @@ if (!gotLock) {
 app.whenReady().then(() => {
   registerDesktopProtocol();
   createWindow();
+  if (!isDevelopment) {
+    configureAutoUpdater();
+  }
   app.on("activate", () => {
     if (BrowserWindow.getAllWindows().length === 0) {
       createWindow();
