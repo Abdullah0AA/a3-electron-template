@@ -9,7 +9,8 @@
     "dev": "bun run --parallel dev:bundle dev:electron",
     "build": "tsdown",
     "typecheck": "tsc --noEmit",
-    "start": "electron ."
+    "start": "electron .",
+    "dist": "tsdown && electron-builder"
   },
   "dependencies": {
     "@a3-electron-template/contracts": "workspace:*",
@@ -18,6 +19,7 @@
   "devDependencies": {
     "@types/node": "catalog:",
     "electron": "^41.0.2",
+    "electron-builder": "^26.8.1",
     "tsdown": "^0.21.4",
     "typescript": "catalog:",
     "wait-on": "^9.0.4"
