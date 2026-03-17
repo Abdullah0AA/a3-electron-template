@@ -1,8 +1,8 @@
+import { DesktopTheme } from "@a3-electron-template/contracts";
 import { useCallback, useEffect, useSyncExternalStore } from "react";
 
-type Theme = "light" | "dark" | "system";
 type ThemeSnapshot = {
-  theme: Theme;
+  theme: DesktopTheme;
   systemDark: boolean;
 };
 
@@ -11,7 +11,7 @@ const MEDIA_QUERY = "(prefers-color-scheme: dark)";
 
 let listeners: Array<() => void> = [];
 let lastSnapshot: ThemeSnapshot | null = null;
-let lastDesktopTheme: Theme | null = null;
+let lastDesktopTheme: DesktopTheme | null = null;
 function emitChange() {
   for (const listener of listeners) listener();
 }
@@ -20,13 +20,13 @@ function getSystemDark(): boolean {
   return window.matchMedia(MEDIA_QUERY).matches;
 }
 
-function getStored(): Theme {
+function getStored(): DesktopTheme {
   const raw = localStorage.getItem(STORAGE_KEY);
   if (raw === "light" || raw === "dark" || raw === "system") return raw;
   return "system";
 }
 
-function applyTheme(theme: Theme, suppressTransitions = false) {
+function applyTheme(theme: DesktopTheme, suppressTransitions = false) {
   if (suppressTransitions) {
     document.documentElement.classList.add("no-transitions");
   }
@@ -44,7 +44,7 @@ function applyTheme(theme: Theme, suppressTransitions = false) {
   }
 }
 
-function syncDesktopTheme(theme: Theme) {
+function syncDesktopTheme(theme: DesktopTheme) {
   const bridge = window.desktopBridge;
   if (!bridge || lastDesktopTheme === theme) {
     return;
@@ -111,7 +111,7 @@ export function useTheme() {
   const resolvedTheme: "light" | "dark" =
     theme === "system" ? (snapshot.systemDark ? "dark" : "light") : theme;
 
-  const setTheme = useCallback((next: Theme) => {
+  const setTheme = useCallback((next: DesktopTheme) => {
     localStorage.setItem(STORAGE_KEY, next);
     applyTheme(next, true);
     emitChange();

@@ -1,25 +1,29 @@
 import { contextBridge, ipcRenderer } from "electron";
-import type { DesktopBridge } from "@a3-electron-template/contracts";
+import type {
+  DesktopBridge,
+  DesktopUpdateState,
+} from "@a3-electron-template/contracts";
 
-const bridge: DesktopBridge = {
+contextBridge.exposeInMainWorld("desktopBridge", {
   showNotification: (title, body) =>
     ipcRenderer.invoke("show-notification", title, body),
+
   setTheme: (theme) => ipcRenderer.invoke("set-theme", theme),
+
   checkForUpdates: () => ipcRenderer.invoke("check-for-updates"),
+
   downloadUpdate: () => ipcRenderer.invoke("download-update"),
+
   installUpdate: () => ipcRenderer.invoke("install-update"),
-  onUpdateState: (listener) => {
-    const channel = "update-state";
-    const handler = (_event: Electron.IpcRendererEvent, state: unknown) => {
-      listener(state as Parameters<typeof listener>[0]);
-    };
 
-    ipcRenderer.on(channel, handler);
-    return () => {
-      ipcRenderer.removeListener(channel, handler);
-    };
-  },
   getUpdateState: () => ipcRenderer.invoke("get-update-state"),
-};
 
-contextBridge.exposeInMainWorld("desktopBridge", bridge);
+  onUpdateState: (listener) => {
+    const wrapped = (_event: Electron.IpcRendererEvent, state: unknown) => {
+      if (typeof state !== "object" || state === null) return;
+      listener(state as DesktopUpdateState);
+    };
+    ipcRenderer.on("update-state", wrapped);
+    return () => ipcRenderer.removeListener("update-state", wrapped);
+  },
+} satisfies DesktopBridge);

@@ -1,27 +1,40 @@
-export type DesktopTheme = string;
+export type DesktopTheme = "light" | "dark" | "system";
 
-export interface UpdateState {
-  status: UpdateStatus;
-  version: string | null;
-  percent: number | null;
-  error: string | null;
-}
-
-export type UpdateStatus =
+export type DesktopUpdateStatus =
+  | "disabled"
   | "idle"
   | "checking"
+  | "up-to-date"
   | "available"
   | "downloading"
   | "downloaded"
-  | "error"
-  | "up-to-date";
+  | "error";
+
+export interface DesktopUpdateState {
+  enabled: boolean;
+  status: DesktopUpdateStatus;
+  currentVersion: string;
+  availableVersion: string | null;
+  downloadedVersion: string | null;
+  downloadPercent: number | null;
+  checkedAt: string | null;
+  message: string | null;
+  errorContext: "check" | "download" | "install" | null;
+  canRetry: boolean;
+}
+
+export interface DesktopUpdateActionResult {
+  accepted: boolean;
+  completed: boolean;
+  state: DesktopUpdateState;
+}
 
 export interface DesktopBridge {
-  showNotification(title: string, body: string): Promise<void>;
+  showNotification: (title: string, body: string) => Promise<void>;
   setTheme: (theme: DesktopTheme) => Promise<void>;
   checkForUpdates: () => Promise<void>;
-  downloadUpdate: () => Promise<void>;
-  installUpdate: () => Promise<void>;
-  onUpdateState: (listener: (state: UpdateState) => void) => () => void;
-  getUpdateState: () => Promise<UpdateState>;
+  downloadUpdate: () => Promise<DesktopUpdateActionResult>;
+  installUpdate: () => Promise<DesktopUpdateActionResult>;
+  onUpdateState: (listener: (state: DesktopUpdateState) => void) => () => void;
+  getUpdateState: () => Promise<DesktopUpdateState>;
 }
