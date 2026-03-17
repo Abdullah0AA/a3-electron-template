@@ -1,12 +1,12 @@
 import React from "react";
 import { ThemeToggle } from "./components/ThemeToggle";
-import { UpdateBanner } from "./components/UpdateBanner";
+import { UpdateNotification } from "./components/UpdateNotification";
 
 export default function App() {
   return (
     <div>
       <ThemeToggle />
-      <UpdateBanner />
+      <UpdateNotification />
       New Version
     </div>
   );
