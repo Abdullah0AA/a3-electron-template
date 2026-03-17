@@ -1,5 +1,5 @@
 {
-  "name": "a3-electron-template",
+  "name": "@a3-electron-template/monorepo",
   "private": true,
   "scripts": {
     "build": "turbo run build",

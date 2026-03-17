@@ -1,9 +1,5 @@
-import { app, BrowserWindow, protocol } from "electron";
+import { app, BrowserWindow, ipcMain, protocol, Notification } from "electron";
 import path from "node:path";
-import { fileURLToPath } from "node:url";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 const DESKTOP_SCHEME = "a3";
 const isDevelopment = Boolean(process.env.VITE_DEV_SERVER_URL);
@@ -26,6 +22,8 @@ function createWindow() {
     height: 600,
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
+      contextIsolation: true,
+      sandbox: true,
     },
   });
 
@@ -35,6 +33,10 @@ function createWindow() {
     win.loadURL(`${DESKTOP_SCHEME}://app/index.html`);
   }
 }
+
+ipcMain.handle("show-notification", (_event, title, body) => {
+  new Notification({ title, body }).show();
+});
 
 app.whenReady().then(() => {
   createWindow();
