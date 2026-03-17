@@ -91,12 +91,8 @@ export function useDesktopUpdate() {
     if (buttonAction === "download") {
       try {
         const result = await bridge.downloadUpdate();
-        if (result.completed) {
-          toast.success("Update downloaded", {
-            description: "Click the update button to restart and install.",
-          });
-          return;
-        }
+        if (result.completed) return;
+
         if (shouldToastDesktopUpdateActionResult(result)) {
           const error = getDesktopUpdateActionError(result);
           if (error) {
