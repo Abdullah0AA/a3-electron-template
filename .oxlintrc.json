@@ -6,10 +6,10 @@
   "categories": {
     "correctness": "warn",
     "suspicious": "warn",
-    "perf": "warn",
+    "perf": "warn"
   },
   "rules": {
     "react/react-in-jsx-scope": "off",
-    "turbo/no-undeclared-env-vars": "error",
-  },
+    "turbo/no-undeclared-env-vars": "error"
+  }
 }
