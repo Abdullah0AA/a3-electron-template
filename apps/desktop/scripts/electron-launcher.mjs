@@ -14,6 +14,11 @@ import { createRequire } from "node:module";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
+// ── App identity ─────────────────────────────────────────────────────────────
+// Keep in sync with:
+//   - apps/desktop/src/app.config.ts
+//   - apps/desktop/electron-builder.yml
+//   - apps/desktop/package.json
 const isDevelopment = Boolean(process.env.VITE_DEV_SERVER_URL);
 const APP_DISPLAY_NAME = isDevelopment ? "A3 App (Dev)" : "A3 App";
 const APP_BUNDLE_ID = "com.a3.app";

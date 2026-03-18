@@ -30,13 +30,8 @@ import {
   reduceDesktopUpdateStateOnDownloadComplete,
   reduceDesktopUpdateStateOnInstallFailure,
 } from "./updateMachine";
+import { APP_DISPLAY_NAME, APP_ID, APP_NAME, DESKTOP_SCHEME, isDevelopment, USER_DATA_DIR, USER_DATA_DIR_NAME } from "./app.config";
 
-const DESKTOP_SCHEME = "a3";
-const APP_NAME = "A3 App";
-const APP_ID = "com.a3.app";
-const isDevelopment = Boolean(process.env.VITE_DEV_SERVER_URL);
-const APP_DISPLAY_NAME = isDevelopment ? `${APP_NAME} (Dev)` : APP_NAME;
-const USER_DATA_DIR_NAME = isDevelopment ? "a3-app-dev" : "a3-app";
 const AUTO_UPDATE_STARTUP_DELAY_MS = 10_000;
 const AUTO_UPDATE_POLL_INTERVAL_MS = 4 * 60 * 60 * 1000;
 
