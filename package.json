@@ -15,7 +15,7 @@
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev",
-    "lint": "turbo run lint",
+    "lint": "oxlint --report-unused-disable-directives",
     "fmt": "oxfmt",
     "fmt:check": "oxfmt --check",
     "check-types": "turbo run typecheck",
@@ -24,6 +24,7 @@
   },
   "devDependencies": {
     "oxfmt": "^0.41.0",
+    "oxlint": "^1.56.0",
     "turbo": "^2.8.17"
   },
   "engines": {

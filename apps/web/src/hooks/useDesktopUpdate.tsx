@@ -1,6 +1,8 @@
-import { useEffect, useState } from "react";
 import type { DesktopUpdateState } from "@a3-electron-template/contracts";
+
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
+
 import {
   resolveDesktopUpdateButtonAction,
   shouldShowDesktopUpdateButton,

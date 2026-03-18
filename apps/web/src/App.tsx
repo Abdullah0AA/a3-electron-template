@@ -1,7 +1,8 @@
-import { ThemeToggle } from "./components/ThemeToggle";
-import { UpdateNotification } from "./components/UpdateNotification";
-import { Button } from "./components/ui/button";
 import { FileIcon, GridIcon, SunIcon, MonitorIcon, ClockIcon, CodeIcon } from "lucide-react";
+
+import { ThemeToggle } from "./components/ThemeToggle";
+import { Button } from "./components/ui/button";
+import { UpdateNotification } from "./components/UpdateNotification";
 
 const FEATURES = [
   {
@@ -46,25 +47,25 @@ const FEATURES = [
 
 export default function App() {
   return (
-    <div className="flex flex-col min-h-svh bg-background text-foreground">
+    <div className="bg-background text-foreground flex min-h-svh flex-col">
       {/* Header */}
-      <header className="flex items-center justify-between px-6 h-12 border-b border-border shrink-0">
+      <header className="border-border flex h-12 shrink-0 items-center justify-between border-b px-6">
         <div className="flex items-center gap-2">
           <span className="text-sm font-medium">A3 App</span>
-          <span className="text-[10px] font-medium px-1.5 py-0.5 rounded-full bg-muted text-muted-foreground border border-border tracking-wide">
+          <span className="bg-muted text-muted-foreground border-border rounded-full border px-1.5 py-0.5 text-[10px] font-medium tracking-wide">
             template
           </span>
         </div>
         <div className="flex items-center gap-2">
-          <span className="text-xs text-muted-foreground">v0.0.0</span>
+          <span className="text-muted-foreground text-xs">v0.0.0</span>
           <ThemeToggle />
         </div>
       </header>
 
       {/* Hero */}
-      <section className="flex flex-col items-center justify-center text-center px-6 pt-16 pb-12 gap-3">
+      <section className="flex flex-col items-center justify-center gap-3 px-6 pt-16 pb-12 text-center">
         <h1 className="text-2xl font-medium tracking-tight">Electron + React + Turbo</h1>
-        <p className="text-sm text-muted-foreground max-w-md leading-relaxed">
+        <p className="text-muted-foreground max-w-md text-sm leading-relaxed">
           A production-ready template with auto-updates, theming, typed IPC bridge, and CI/CD.
           Delete this page and start building.
         </p>
@@ -79,29 +80,29 @@ export default function App() {
       </section>
 
       {/* Feature grid */}
-      <section className="grid grid-cols-3 gap-3 px-6 pb-12 max-w-3xl mx-auto w-full">
+      <section className="mx-auto grid w-full max-w-3xl grid-cols-3 gap-3 px-6 pb-12">
         {FEATURES.map(({ icon: Icon, iconClass, title, description }) => (
           <div
             key={title}
-            className="rounded-xl border border-border bg-background p-4 flex flex-col gap-2.5"
+            className="border-border bg-background flex flex-col gap-2.5 rounded-xl border p-4"
           >
             <div
-              className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 ${iconClass}`}
+              className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-lg ${iconClass}`}
             >
-              <Icon className="w-3.5 h-3.5" />
+              <Icon className="h-3.5 w-3.5" />
             </div>
             <div>
-              <p className="text-[13px] font-medium text-foreground mb-0.5">{title}</p>
-              <p className="text-xs text-muted-foreground leading-relaxed">{description}</p>
+              <p className="text-foreground mb-0.5 text-[13px] font-medium">{title}</p>
+              <p className="text-muted-foreground text-xs leading-relaxed">{description}</p>
             </div>
           </div>
         ))}
       </section>
 
       {/* Footer */}
-      <footer className="mt-auto border-t border-border px-6 py-4 text-center text-xs text-muted-foreground">
+      <footer className="border-border text-muted-foreground mt-auto border-t px-6 py-4 text-center text-xs">
         Start by editing{" "}
-        <code className="font-mono text-[11px] bg-muted px-1.5 py-0.5 rounded">
+        <code className="bg-muted rounded px-1.5 py-0.5 font-mono text-[11px]">
           apps/web/src/App.tsx
         </code>
       </footer>

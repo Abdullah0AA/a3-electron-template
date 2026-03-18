@@ -1,13 +1,21 @@
-import { app, BrowserWindow, ipcMain, protocol, Notification, nativeTheme } from "electron";
-import { autoUpdater } from "electron-updater";
-import path from "node:path";
-import fs from "node:fs";
-import windowStateKeeper from "electron-window-state";
 import type {
   DesktopUpdateState,
   DesktopUpdateActionResult,
 } from "@a3-electron-template/contracts";
-import { shouldBroadcastDownloadProgress, getAutoUpdateDisabledReason } from "./updateState";
+
+import { app, BrowserWindow, ipcMain, protocol, Notification, nativeTheme } from "electron";
+import { autoUpdater } from "electron-updater";
+import windowStateKeeper from "electron-window-state";
+import fs from "node:fs";
+import path from "node:path";
+
+import {
+  APP_DISPLAY_NAME,
+  APP_ID,
+  DESKTOP_SCHEME,
+  isDevelopment,
+  USER_DATA_DIR_NAME,
+} from "./app.config";
 import {
   createInitialDesktopUpdateState,
   reduceDesktopUpdateStateOnCheckStart,
@@ -20,15 +28,7 @@ import {
   reduceDesktopUpdateStateOnDownloadComplete,
   reduceDesktopUpdateStateOnInstallFailure,
 } from "./updateMachine";
-import {
-  APP_DISPLAY_NAME,
-  APP_ID,
-  APP_NAME,
-  DESKTOP_SCHEME,
-  isDevelopment,
-  USER_DATA_DIR,
-  USER_DATA_DIR_NAME,
-} from "./app.config";
+import { shouldBroadcastDownloadProgress, getAutoUpdateDisabledReason } from "./updateState";
 
 const AUTO_UPDATE_STARTUP_DELAY_MS = 10_000;
 const AUTO_UPDATE_POLL_INTERVAL_MS = 4 * 60 * 60 * 1000;

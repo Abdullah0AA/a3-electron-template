@@ -1,12 +1,15 @@
+import type { DesktopUpdateState } from "@a3-electron-template/contracts";
+
+import { AlertCircle, CheckCircle2, Download, Loader2, X } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+
+import { cn } from "@/lib/utils";
+
 import { useDesktopUpdate } from "../hooks/useDesktopUpdate";
 import { shouldHighlightDesktopUpdateError } from "../lib/desktopUpdateLogic";
+import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
 import { Progress } from "./ui/progress";
-import { Badge } from "./ui/badge";
-import type { DesktopUpdateState } from "@a3-electron-template/contracts";
-import { useEffect, useRef, useState } from "react";
-import { cn } from "@/lib/utils";
-import { AlertCircle, CheckCircle2, Download, Loader2, X } from "lucide-react";
 
 type UpdateNotificationProps = {
   debug?: boolean;
@@ -215,8 +218,8 @@ export function UpdateNotification({ debug = false }: UpdateNotificationProps) {
     <>
       {/* ── Debug panel ─────────────────────────────────────────────────── */}
       {isDebugMode && (
-        <div className="fixed bottom-40 right-4 z-50 w-75 rounded-xl border border-border bg-background/95 p-3 shadow-lg backdrop-blur">
-          <p className="mb-2 text-xs font-medium uppercase tracking-wide text-muted-foreground">
+        <div className="border-border bg-background/95 fixed right-4 bottom-40 z-50 w-75 rounded-xl border p-3 shadow-lg backdrop-blur">
+          <p className="text-muted-foreground mb-2 text-xs font-medium tracking-wide uppercase">
             Debug update state
           </p>
           <div className="flex flex-wrap gap-2">
@@ -250,13 +253,13 @@ export function UpdateNotification({ debug = false }: UpdateNotificationProps) {
       {!shouldHideNotification && config && (
         <div
           className={cn(
-            "fixed bottom-4 right-4 z-50 w-72",
-            "rounded-xl border bg-background/95 shadow-lg backdrop-blur-sm",
+            "fixed right-4 bottom-4 z-50 w-72",
+            "bg-background/95 rounded-xl border shadow-lg backdrop-blur-sm",
             "flex flex-col gap-2.5 p-3",
             "transition-colors duration-200",
             isDownloaded && "border-emerald-500/25",
             isError && "border-destructive/30",
-            isHighlightedError && "animate-pulse border-destructive/60",
+            isHighlightedError && "border-destructive/60 animate-pulse",
           )}
         >
           {/* Top row: icon + text + dismiss */}
@@ -272,8 +275,8 @@ export function UpdateNotification({ debug = false }: UpdateNotificationProps) {
             </div>
 
             <div className="min-w-0 flex-1">
-              <p className="text-[13px] font-medium leading-snug text-foreground">{config.title}</p>
-              <p className="mt-0.5 text-xs leading-snug text-muted-foreground">
+              <p className="text-foreground text-[13px] leading-snug font-medium">{config.title}</p>
+              <p className="text-muted-foreground mt-0.5 text-xs leading-snug">
                 {config.getDescription(state)}
               </p>
             </div>
@@ -281,7 +284,7 @@ export function UpdateNotification({ debug = false }: UpdateNotificationProps) {
             {isDismissible && (
               <button
                 onClick={() => setDismissed(true)}
-                className="flex h-5 w-5 shrink-0 items-center justify-center rounded text-muted-foreground/50 transition-colors hover:bg-muted hover:text-muted-foreground"
+                className="text-muted-foreground/50 hover:bg-muted hover:text-muted-foreground flex h-5 w-5 shrink-0 items-center justify-center rounded transition-colors"
                 aria-label="Dismiss"
               >
                 <X className="size-3" />
@@ -293,7 +296,7 @@ export function UpdateNotification({ debug = false }: UpdateNotificationProps) {
           {state.availableVersion && (
             <Badge
               variant="secondary"
-              className="w-fit h-5 gap-1 rounded-full px-2 text-[11px] font-medium"
+              className="h-5 w-fit gap-1 rounded-full px-2 text-[11px] font-medium"
             >
               <span className="text-muted-foreground">{state.currentVersion}</span>
               <span className="text-muted-foreground/40">→</span>
@@ -305,7 +308,7 @@ export function UpdateNotification({ debug = false }: UpdateNotificationProps) {
           {isDownloading && (
             <div className="flex items-center gap-2">
               <Progress value={state.downloadPercent ?? 0} className="h-0.75 flex-1" />
-              <span className="w-8 text-right text-[11px] tabular-nums text-muted-foreground">
+              <span className="text-muted-foreground w-8 text-right text-[11px] tabular-nums">
                 {Math.round(state.downloadPercent ?? 0)}%
               </span>
             </div>
@@ -326,7 +329,7 @@ export function UpdateNotification({ debug = false }: UpdateNotificationProps) {
               <Button
                 size="sm"
                 variant="ghost"
-                className="h-7 px-3 text-xs text-muted-foreground"
+                className="text-muted-foreground h-7 px-3 text-xs"
                 onClick={() => setDismissed(true)}
               >
                 Later

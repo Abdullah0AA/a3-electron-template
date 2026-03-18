@@ -36,7 +36,6 @@ function applyTheme(theme: DesktopTheme, suppressTransitions = false) {
   if (suppressTransitions) {
     // Force a reflow so the no-transitions class takes effect before removal
     // oxlint-disable-next-line no-unused-expressions
-    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     document.documentElement.offsetHeight;
     requestAnimationFrame(() => {
       document.documentElement.classList.remove("no-transitions");
