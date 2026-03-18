@@ -51,9 +51,7 @@ const STATUS_CONFIG: Record<string, StatusConfig> = {
     icon: <Loader2 className="size-4 animate-spin" />,
     title: "Downloading update",
     getDescription: (s) =>
-      s.availableVersion
-        ? `Fetching version ${s.availableVersion}…`
-        : "Please wait…",
+      s.availableVersion ? `Fetching version ${s.availableVersion}…` : "Please wait…",
   },
   downloaded: {
     iconBg: "bg-emerald-500/10",
@@ -76,8 +74,7 @@ const STATUS_CONFIG: Record<string, StatusConfig> = {
 export function UpdateNotification({ debug = false }: UpdateNotificationProps) {
   const { state: bridgeState, handleAction } = useDesktopUpdate();
   const [dismissed, setDismissed] = useState(false);
-  const [debugState, setDebugState] =
-    useState<DesktopUpdateState>(debugInitialState);
+  const [debugState, setDebugState] = useState<DesktopUpdateState>(debugInitialState);
   const downloadIntervalRef = useRef<number | null>(null);
   const isDebugMode = import.meta.env.DEV && debug;
 
@@ -105,9 +102,7 @@ export function UpdateNotification({ debug = false }: UpdateNotificationProps) {
 
   const handleNotificationAction = () => {
     if (isDebugMode) {
-      console.log(
-        `[UpdateNotification debug] action from state: ${state.status}`,
-      );
+      console.log(`[UpdateNotification debug] action from state: ${state.status}`);
       return;
     }
     void handleAction();
@@ -225,12 +220,7 @@ export function UpdateNotification({ debug = false }: UpdateNotificationProps) {
             Debug update state
           </p>
           <div className="flex flex-wrap gap-2">
-            <Button
-              size="sm"
-              variant="outline"
-              className="h-7 text-xs"
-              onClick={setDebugAvailable}
-            >
+            <Button size="sm" variant="outline" className="h-7 text-xs" onClick={setDebugAvailable}>
               Available
             </Button>
             <Button
@@ -249,12 +239,7 @@ export function UpdateNotification({ debug = false }: UpdateNotificationProps) {
             >
               Downloaded
             </Button>
-            <Button
-              size="sm"
-              variant="outline"
-              className="h-7 text-xs"
-              onClick={setDebugError}
-            >
+            <Button size="sm" variant="outline" className="h-7 text-xs" onClick={setDebugError}>
               Error
             </Button>
           </div>
@@ -287,9 +272,7 @@ export function UpdateNotification({ debug = false }: UpdateNotificationProps) {
             </div>
 
             <div className="min-w-0 flex-1">
-              <p className="text-[13px] font-medium leading-snug text-foreground">
-                {config.title}
-              </p>
+              <p className="text-[13px] font-medium leading-snug text-foreground">{config.title}</p>
               <p className="mt-0.5 text-xs leading-snug text-muted-foreground">
                 {config.getDescription(state)}
               </p>
@@ -312,23 +295,16 @@ export function UpdateNotification({ debug = false }: UpdateNotificationProps) {
               variant="secondary"
               className="w-fit h-5 gap-1 rounded-full px-2 text-[11px] font-medium"
             >
-              <span className="text-muted-foreground">
-                {state.currentVersion}
-              </span>
+              <span className="text-muted-foreground">{state.currentVersion}</span>
               <span className="text-muted-foreground/40">→</span>
-              <span className="text-blue-500 dark:text-blue-400">
-                {state.availableVersion}
-              </span>
+              <span className="text-blue-500 dark:text-blue-400">{state.availableVersion}</span>
             </Badge>
           )}
 
           {/* Progress bar */}
           {isDownloading && (
             <div className="flex items-center gap-2">
-              <Progress
-                value={state.downloadPercent ?? 0}
-                className="h-0.75 flex-1"
-              />
+              <Progress value={state.downloadPercent ?? 0} className="h-0.75 flex-1" />
               <span className="w-8 text-right text-[11px] tabular-nums text-muted-foreground">
                 {Math.round(state.downloadPercent ?? 0)}%
               </span>

@@ -1,14 +1,7 @@
 import { ThemeToggle } from "./components/ThemeToggle";
 import { UpdateNotification } from "./components/UpdateNotification";
 import { Button } from "./components/ui/button";
-import {
-  FileIcon,
-  GridIcon,
-  SunIcon,
-  MonitorIcon,
-  ClockIcon,
-  CodeIcon,
-} from "lucide-react";
+import { FileIcon, GridIcon, SunIcon, MonitorIcon, ClockIcon, CodeIcon } from "lucide-react";
 
 const FEATURES = [
   {
@@ -20,41 +13,34 @@ const FEATURES = [
   },
   {
     icon: GridIcon,
-    iconClass:
-      "bg-green-50 text-green-600 dark:bg-green-950 dark:text-green-400",
+    iconClass: "bg-green-50 text-green-600 dark:bg-green-950 dark:text-green-400",
     title: "Auto-updates",
     description:
       "electron-updater with GitHub Releases. State machine, progress tracking, OS notifications.",
   },
   {
     icon: SunIcon,
-    iconClass:
-      "bg-amber-50 text-amber-600 dark:bg-amber-950 dark:text-amber-400",
+    iconClass: "bg-amber-50 text-amber-600 dark:bg-amber-950 dark:text-amber-400",
     title: "Theme system",
-    description:
-      "Light, dark, system. Flash-free, cross-tab sync, syncs native title bar via IPC.",
+    description: "Light, dark, system. Flash-free, cross-tab sync, syncs native title bar via IPC.",
   },
   {
     icon: MonitorIcon,
-    iconClass:
-      "bg-purple-50 text-purple-600 dark:bg-purple-950 dark:text-purple-400",
+    iconClass: "bg-purple-50 text-purple-600 dark:bg-purple-950 dark:text-purple-400",
     title: "Window state",
-    description:
-      "Remembers size and position across restarts. Single instance lock included.",
+    description: "Remembers size and position across restarts. Single instance lock included.",
   },
   {
     icon: ClockIcon,
     iconClass: "bg-teal-50 text-teal-600 dark:bg-teal-950 dark:text-teal-400",
     title: "CI / CD",
-    description:
-      "GitHub Actions builds for Linux, macOS, Windows on every version tag.",
+    description: "GitHub Actions builds for Linux, macOS, Windows on every version tag.",
   },
   {
     icon: CodeIcon,
     iconClass: "bg-muted text-muted-foreground",
     title: "Turborepo + Bun",
-    description:
-      "Monorepo with shared packages, fast builds, and workspace-aware scripts.",
+    description: "Monorepo with shared packages, fast builds, and workspace-aware scripts.",
   },
 ];
 
@@ -77,12 +63,10 @@ export default function App() {
 
       {/* Hero */}
       <section className="flex flex-col items-center justify-center text-center px-6 pt-16 pb-12 gap-3">
-        <h1 className="text-2xl font-medium tracking-tight">
-          Electron + React + Turbo
-        </h1>
+        <h1 className="text-2xl font-medium tracking-tight">Electron + React + Turbo</h1>
         <p className="text-sm text-muted-foreground max-w-md leading-relaxed">
-          A production-ready template with auto-updates, theming, typed IPC
-          bridge, and CI/CD. Delete this page and start building.
+          A production-ready template with auto-updates, theming, typed IPC bridge, and CI/CD.
+          Delete this page and start building.
         </p>
         <Button
           variant="outline"
@@ -107,12 +91,8 @@ export default function App() {
               <Icon className="w-3.5 h-3.5" />
             </div>
             <div>
-              <p className="text-[13px] font-medium text-foreground mb-0.5">
-                {title}
-              </p>
-              <p className="text-xs text-muted-foreground leading-relaxed">
-                {description}
-              </p>
+              <p className="text-[13px] font-medium text-foreground mb-0.5">{title}</p>
+              <p className="text-xs text-muted-foreground leading-relaxed">{description}</p>
             </div>
           </div>
         ))}

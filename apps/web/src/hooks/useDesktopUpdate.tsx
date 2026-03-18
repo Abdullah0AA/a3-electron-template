@@ -101,10 +101,7 @@ export function useDesktopUpdate() {
         }
       } catch (error) {
         toast.error("Could not start update download", {
-          description:
-            error instanceof Error
-              ? error.message
-              : "An unexpected error occurred.",
+          description: error instanceof Error ? error.message : "An unexpected error occurred.",
         });
       }
       return;
@@ -121,10 +118,7 @@ export function useDesktopUpdate() {
         }
       } catch (error) {
         toast.error("Could not install update", {
-          description:
-            error instanceof Error
-              ? error.message
-              : "An unexpected error occurred.",
+          description: error instanceof Error ? error.message : "An unexpected error occurred.",
         });
       }
     }

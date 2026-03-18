@@ -1,12 +1,8 @@
 import { contextBridge, ipcRenderer } from "electron";
-import type {
-  DesktopBridge,
-  DesktopUpdateState,
-} from "@a3-electron-template/contracts";
+import type { DesktopBridge, DesktopUpdateState } from "@a3-electron-template/contracts";
 
 contextBridge.exposeInMainWorld("desktopBridge", {
-  showNotification: (title, body) =>
-    ipcRenderer.invoke("show-notification", title, body),
+  showNotification: (title, body) => ipcRenderer.invoke("show-notification", title, body),
 
   setTheme: (theme) => ipcRenderer.invoke("set-theme", theme),
 

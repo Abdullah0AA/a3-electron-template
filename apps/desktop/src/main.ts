@@ -1,11 +1,4 @@
-import {
-  app,
-  BrowserWindow,
-  ipcMain,
-  protocol,
-  Notification,
-  nativeTheme,
-} from "electron";
+import { app, BrowserWindow, ipcMain, protocol, Notification, nativeTheme } from "electron";
 import { autoUpdater } from "electron-updater";
 import path from "node:path";
 import fs from "node:fs";
@@ -14,10 +7,7 @@ import type {
   DesktopUpdateState,
   DesktopUpdateActionResult,
 } from "@a3-electron-template/contracts";
-import {
-  shouldBroadcastDownloadProgress,
-  getAutoUpdateDisabledReason,
-} from "./updateState";
+import { shouldBroadcastDownloadProgress, getAutoUpdateDisabledReason } from "./updateState";
 import {
   createInitialDesktopUpdateState,
   reduceDesktopUpdateStateOnCheckStart,
@@ -30,7 +20,15 @@ import {
   reduceDesktopUpdateStateOnDownloadComplete,
   reduceDesktopUpdateStateOnInstallFailure,
 } from "./updateMachine";
-import { APP_DISPLAY_NAME, APP_ID, APP_NAME, DESKTOP_SCHEME, isDevelopment, USER_DATA_DIR, USER_DATA_DIR_NAME } from "./app.config";
+import {
+  APP_DISPLAY_NAME,
+  APP_ID,
+  APP_NAME,
+  DESKTOP_SCHEME,
+  isDevelopment,
+  USER_DATA_DIR,
+  USER_DATA_DIR_NAME,
+} from "./app.config";
 
 const AUTO_UPDATE_STARTUP_DELAY_MS = 10_000;
 const AUTO_UPDATE_POLL_INTERVAL_MS = 4 * 60 * 60 * 1000;
@@ -42,9 +40,7 @@ let updaterConfigured = false;
 let updatePollTimer: ReturnType<typeof setInterval> | null = null;
 let updateStartupTimer: ReturnType<typeof setTimeout> | null = null;
 let isQuitting = false;
-let updateState: DesktopUpdateState = createInitialDesktopUpdateState(
-  app.getVersion(),
-);
+let updateState: DesktopUpdateState = createInitialDesktopUpdateState(app.getVersion());
 
 protocol.registerSchemesAsPrivileged([
   {
@@ -61,12 +57,10 @@ protocol.registerSchemesAsPrivileged([
 function resolveUserDataPath(): string {
   const appDataBase =
     process.platform === "win32"
-      ? process.env.APPDATA ||
-        path.join(app.getPath("home"), "AppData", "Roaming")
+      ? process.env.APPDATA || path.join(app.getPath("home"), "AppData", "Roaming")
       : process.platform === "darwin"
         ? path.join(app.getPath("home"), "Library", "Application Support")
-        : process.env.XDG_CONFIG_HOME ||
-          path.join(app.getPath("home"), ".config");
+        : process.env.XDG_CONFIG_HOME || path.join(app.getPath("home"), ".config");
 
   return path.join(appDataBase, USER_DATA_DIR_NAME);
 }
@@ -108,30 +102,19 @@ function clearUpdateTimers(): void {
 
 async function checkForUpdates(reason: string): Promise<void> {
   if (isQuitting || !updaterConfigured || updateCheckInFlight) return;
-  if (
-    updateState.status === "downloading" ||
-    updateState.status === "downloaded"
-  ) {
-    console.info(
-      `[updater] Skipping check (${reason}) — status=${updateState.status}`,
-    );
+  if (updateState.status === "downloading" || updateState.status === "downloaded") {
+    console.info(`[updater] Skipping check (${reason}) — status=${updateState.status}`);
     return;
   }
   updateCheckInFlight = true;
-  setUpdateState(
-    reduceDesktopUpdateStateOnCheckStart(updateState, new Date().toISOString()),
-  );
+  setUpdateState(reduceDesktopUpdateStateOnCheckStart(updateState, new Date().toISOString()));
   console.info(`[updater] Checking for updates (${reason})...`);
   try {
     await autoUpdater.checkForUpdates();
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : String(error);
     setUpdateState(
-      reduceDesktopUpdateStateOnCheckFailure(
-        updateState,
-        message,
-        new Date().toISOString(),
-      ),
+      reduceDesktopUpdateStateOnCheckFailure(updateState, message, new Date().toISOString()),
     );
     console.error(`[updater] Check failed: ${message}`);
   } finally {
@@ -143,11 +126,7 @@ async function downloadAvailableUpdate(): Promise<{
   accepted: boolean;
   completed: boolean;
 }> {
-  if (
-    !updaterConfigured ||
-    updateDownloadInFlight ||
-    updateState.status !== "available"
-  ) {
+  if (!updaterConfigured || updateDownloadInFlight || updateState.status !== "available") {
     return { accepted: false, completed: false };
   }
   updateDownloadInFlight = true;
@@ -158,9 +137,7 @@ async function downloadAvailableUpdate(): Promise<{
     return { accepted: true, completed: true };
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : String(error);
-    setUpdateState(
-      reduceDesktopUpdateStateOnDownloadFailure(updateState, message),
-    );
+    setUpdateState(reduceDesktopUpdateStateOnDownloadFailure(updateState, message));
     console.error(`[updater] Download failed: ${message}`);
     return { accepted: true, completed: false };
   } finally {
@@ -183,9 +160,7 @@ async function installDownloadedUpdate(): Promise<{
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : String(error);
     isQuitting = false;
-    setUpdateState(
-      reduceDesktopUpdateStateOnInstallFailure(updateState, message),
-    );
+    setUpdateState(reduceDesktopUpdateStateOnInstallFailure(updateState, message));
     console.error(`[updater] Install failed: ${message}`);
     return { accepted: true, completed: false };
   }
@@ -223,27 +198,18 @@ function configureAutoUpdater(): void {
   });
 
   autoUpdater.on("update-not-available", () => {
-    setUpdateState(
-      reduceDesktopUpdateStateOnNoUpdate(updateState, new Date().toISOString()),
-    );
+    setUpdateState(reduceDesktopUpdateStateOnNoUpdate(updateState, new Date().toISOString()));
     console.info("[updater] No updates available.");
   });
 
   autoUpdater.on("download-progress", (progress) => {
     if (shouldBroadcastDownloadProgress(updateState, progress.percent)) {
-      setUpdateState(
-        reduceDesktopUpdateStateOnDownloadProgress(
-          updateState,
-          progress.percent,
-        ),
-      );
+      setUpdateState(reduceDesktopUpdateStateOnDownloadProgress(updateState, progress.percent));
     }
   });
 
   autoUpdater.on("update-downloaded", (info) => {
-    setUpdateState(
-      reduceDesktopUpdateStateOnDownloadComplete(updateState, info.version),
-    );
+    setUpdateState(reduceDesktopUpdateStateOnDownloadComplete(updateState, info.version));
     console.info(`[updater] Update downloaded: ${info.version}`);
   });
 
@@ -251,11 +217,7 @@ function configureAutoUpdater(): void {
     const message = error instanceof Error ? error.message : String(error);
     if (!updateCheckInFlight && !updateDownloadInFlight) {
       setUpdateState(
-        reduceDesktopUpdateStateOnCheckFailure(
-          updateState,
-          message,
-          new Date().toISOString(),
-        ),
+        reduceDesktopUpdateStateOnCheckFailure(updateState, message, new Date().toISOString()),
       );
     }
     console.error(`[updater] Error: ${message}`);
@@ -344,8 +306,7 @@ function registerDesktopProtocol(): void {
 
       const requested = normalized.length > 0 ? normalized : "index.html";
       const resolved = path.resolve(path.join(staticRootResolved, requested));
-      const isInRoot =
-        resolved === fallbackIndex || resolved.startsWith(staticRootPrefix);
+      const isInRoot = resolved === fallbackIndex || resolved.startsWith(staticRootPrefix);
 
       if (!isInRoot || !fs.existsSync(resolved)) {
         if (path.extname(resolved)) {

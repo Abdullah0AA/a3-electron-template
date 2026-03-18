@@ -1,12 +1,7 @@
 import type { DesktopUpdateState } from "@a3-electron-template/contracts";
-import {
-  getCanRetryAfterDownloadFailure,
-  nextStatusAfterDownloadFailure,
-} from "./updateState";
+import { getCanRetryAfterDownloadFailure, nextStatusAfterDownloadFailure } from "./updateState";
 
-export function createInitialDesktopUpdateState(
-  currentVersion: string,
-): DesktopUpdateState {
+export function createInitialDesktopUpdateState(currentVersion: string): DesktopUpdateState {
   return {
     enabled: false,
     status: "disabled",

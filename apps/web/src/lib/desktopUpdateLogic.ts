@@ -21,31 +21,23 @@ export function resolveDesktopUpdateButtonAction(
   return "none";
 }
 
-export function shouldShowDesktopUpdateButton(
-  state: DesktopUpdateState | null,
-): boolean {
+export function shouldShowDesktopUpdateButton(state: DesktopUpdateState | null): boolean {
   if (!state || !state.enabled) return false;
   if (state.status === "downloading") return true;
   return resolveDesktopUpdateButtonAction(state) !== "none";
 }
 
-export function isDesktopUpdateButtonDisabled(
-  state: DesktopUpdateState | null,
-): boolean {
+export function isDesktopUpdateButtonDisabled(state: DesktopUpdateState | null): boolean {
   return state?.status === "downloading";
 }
 
-export function getDesktopUpdateButtonTooltip(
-  state: DesktopUpdateState,
-): string {
+export function getDesktopUpdateButtonTooltip(state: DesktopUpdateState): string {
   if (state.status === "available") {
     return `Update ${state.availableVersion ?? "available"} ready to download`;
   }
   if (state.status === "downloading") {
     const progress =
-      typeof state.downloadPercent === "number"
-        ? ` (${Math.floor(state.downloadPercent)}%)`
-        : "";
+      typeof state.downloadPercent === "number" ? ` (${Math.floor(state.downloadPercent)}%)` : "";
     return `Downloading update${progress}`;
   }
   if (state.status === "downloaded") {
@@ -63,24 +55,18 @@ export function getDesktopUpdateButtonTooltip(
   return "Update available";
 }
 
-export function getDesktopUpdateActionError(
-  result: DesktopUpdateActionResult,
-): string | null {
+export function getDesktopUpdateActionError(result: DesktopUpdateActionResult): string | null {
   if (!result.accepted || result.completed) return null;
   if (typeof result.state.message !== "string") return null;
   const message = result.state.message.trim();
   return message.length > 0 ? message : null;
 }
 
-export function shouldToastDesktopUpdateActionResult(
-  result: DesktopUpdateActionResult,
-): boolean {
+export function shouldToastDesktopUpdateActionResult(result: DesktopUpdateActionResult): boolean {
   return result.accepted && !result.completed;
 }
 
-export function shouldHighlightDesktopUpdateError(
-  state: DesktopUpdateState | null,
-): boolean {
+export function shouldHighlightDesktopUpdateError(state: DesktopUpdateState | null): boolean {
   if (!state || state.status !== "error") return false;
   return state.errorContext === "download" || state.errorContext === "install";
 }
