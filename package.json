@@ -23,6 +23,7 @@
     "dist": "bun run build && bun run --cwd apps/desktop dist"
   },
   "devDependencies": {
+    "eslint-plugin-turbo": "^2.8.17",
     "oxfmt": "^0.41.0",
     "oxlint": "^1.56.0",
     "turbo": "^2.8.17"
